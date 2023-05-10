@@ -1,26 +1,23 @@
-#!/usr/bin/env groovy
+#!groovy
 
 pipeline {
-
-    agent {
-        docker {
-            image 'python'
-            args '-u root'
+	agent none
+  stages {
+  	stage('Maven Install') {
+    	agent {
+      	docker {
+        	image 'maven:3.5.0'
         }
+      }
+      steps {
+      	sh 'mvn clean install'
+      }
     }
-
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building.'
-                sh 'mvn package'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing.'
-                sh 'mvn package'
-            }
-        }
+    stage('Docker Build') {
+    	agent any
+      steps {
+      	sh 'docker build -t shanem/spring-petclinic:latest .'
+      }
     }
+  }
 }

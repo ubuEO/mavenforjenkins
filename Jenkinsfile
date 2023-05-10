@@ -4,7 +4,7 @@ pipeline {
 
     agent {
         docker {
-            image 'simple_flask'
+            image 'python'
             args '-u root'
         }
     }
@@ -13,13 +13,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building.'
-                sh 'npm install'
+                sh 'mvn package'
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing.'
-                sh 'npm test'
+                sh 'mvn package'
             }
         }
     }
